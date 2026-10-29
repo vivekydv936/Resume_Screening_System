@@ -1,0 +1,130 @@
+{
+  "rows": 500,
+  "columns": 8,
+  "column_order": [
+    "resume_id",
+    "job_role",
+    "years_exp",
+    "skills_matched",
+    "education_score",
+    "keyword_density",
+    "predicted_score",
+    "shortlisted"
+  ],
+  "dtypes": {
+    "resume_id": "string",
+    "job_role": "string",
+    "years_exp": "int64",
+    "skills_matched": "int64",
+    "education_score": "int64",
+    "keyword_density": "float64",
+    "predicted_score": "float64",
+    "shortlisted": "int64"
+  },
+  "null_counts": {
+    "resume_id": 0,
+    "job_role": 0,
+    "years_exp": 0,
+    "skills_matched": 0,
+    "education_score": 0,
+    "keyword_density": 0,
+    "predicted_score": 0,
+    "shortlisted": 0
+  },
+  "duplicate_rows": 0,
+  "duplicate_resume_ids": 0,
+  "numeric_ranges": {
+    "years_exp": {
+      "min": 0.0,
+      "max": 15.0
+    },
+    "skills_matched": {
+      "min": 3.0,
+      "max": 15.0
+    },
+    "education_score": {
+      "min": 60.0,
+      "max": 100.0
+    },
+    "keyword_density": {
+      "min": 0.101,
+      "max": 0.9
+    },
+    "predicted_score": {
+      "min": 40.1,
+      "max": 100.0
+    },
+    "shortlisted": {
+      "min": 0.0,
+      "max": 1.0
+    }
+  },
+  "job_role_counts": {
+    "HR_Executive": 120,
+    "QA_Engineer": 104,
+    "Data_Analyst": 102,
+    "Software_Engineer": 87,
+    "Project_Manager": 87
+  },
+  "shortlisted_counts": {
+    "0": 327,
+    "1": 173
+  },
+  "correlations": {
+    "years_exp": {
+      "years_exp": 1.0,
+      "skills_matched": -0.11,
+      "education_score": -0.0011,
+      "keyword_density": 0.0857,
+      "predicted_score": 0.0126,
+      "shortlisted": 0.0249
+    },
+    "skills_matched": {
+      "years_exp": -0.11,
+      "skills_matched": 1.0,
+      "education_score": 0.0171,
+      "keyword_density": 0.05,
+      "predicted_score": 0.0304,
+      "shortlisted": -0.0437
+    },
+    "education_score": {
+      "years_exp": -0.0011,
+      "skills_matched": 0.0171,
+      "education_score": 1.0,
+      "keyword_density": -0.0116,
+      "predicted_score": -0.0123,
+      "shortlisted": -0.0036
+    },
+    "keyword_density": {
+      "years_exp": 0.0857,
+      "skills_matched": 0.05,
+      "education_score": -0.0116,
+      "keyword_density": 1.0,
+      "predicted_score": 0.0532,
+      "shortlisted": -0.0293
+    },
+    "predicted_score": {
+      "years_exp": 0.0126,
+      "skills_matched": 0.0304,
+      "education_score": -0.0123,
+      "keyword_density": 0.0532,
+      "predicted_score": 1.0,
+      "shortlisted": -0.0085
+    },
+    "shortlisted": {
+      "years_exp": 0.0249,
+      "skills_matched": -0.0437,
+      "education_score": -0.0036,
+      "keyword_density": -0.0293,
+      "predicted_score": -0.0085,
+      "shortlisted": 1.0
+    }
+  },
+  "grouped_shortlist_rate": {
+    "Data_Analyst": 0.3333,
+    "HR_Executive": 0.2917,
+    "Project_Manager": 0.4138,
+    "QA_Engineer": 0.3558,
+    "Software_Engineer": 0.3563
+  }
+}

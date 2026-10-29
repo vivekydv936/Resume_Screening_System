@@ -1,0 +1,7 @@
+body { background: #f6f8fb; }
+.card { border: 0; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+h1 { color: #17365d; }
+.score { font-weight: 700; color: #17365d; }
+.skill { display: inline-block; margin: 2px; padding: 3px 8px; border-radius: 12px; background: #e8f1fb; }
+.missing { background: #fff0f0; }
+.review-actions { display: flex; flex-wrap: wrap; gap: 4px; min-width: 220px; }

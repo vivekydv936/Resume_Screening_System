@@ -1,0 +1,84 @@
+{
+  "pairs_tested": 4,
+  "changed_pairs": 0,
+  "results": [
+    {
+      "pair": "name_pair_1",
+      "first_cue": "Alex Morgan",
+      "second_cue": "Jordan Lee",
+      "text_similarity_difference": 0.0,
+      "final_score_difference": 0.0,
+      "first_matched_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning"
+      ],
+      "second_matched_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning"
+      ],
+      "rank_changed": false
+    },
+    {
+      "pair": "name_pair_2",
+      "first_cue": "Priya Shah",
+      "second_cue": "Michael Chen",
+      "text_similarity_difference": 0.0,
+      "final_score_difference": 0.0,
+      "first_matched_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning"
+      ],
+      "second_matched_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning"
+      ],
+      "rank_changed": false
+    },
+    {
+      "pair": "cue_pair_1",
+      "first_cue": "She is a candidate",
+      "second_cue": "He is a candidate",
+      "text_similarity_difference": 0.0,
+      "final_score_difference": 0.0,
+      "first_matched_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning"
+      ],
+      "second_matched_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning"
+      ],
+      "rank_changed": false
+    },
+    {
+      "pair": "cue_pair_2",
+      "first_cue": "female candidate",
+      "second_cue": "male candidate",
+      "text_similarity_difference": 0.0,
+      "final_score_difference": 0.0,
+      "first_matched_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning"
+      ],
+      "second_matched_skills": [
+        "Python",
+        "SQL",
+        "Machine Learning"
+      ],
+      "rank_changed": false
+    }
+  ],
+  "limitations": [
+    "The supplied dataset has no validated gender, age, or name attributes, so group-level fairness metrics are not valid.",
+    "These are controlled text counterfactuals, not evidence about real demographic groups.",
+    "Name and pronoun tokens can change lexical TF-IDF similarity even when qualifications are identical.",
+    "No protected attribute is intentionally used by the scoring formula."
+  ]
+}

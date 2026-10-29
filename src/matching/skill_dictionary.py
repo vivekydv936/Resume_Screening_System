@@ -1,0 +1,61 @@
+"""Configurable domain skill vocabulary and synonym mappings."""
+
+from __future__ import annotations
+
+from typing import Final
+
+SKILL_ALIASES: Final[dict[str, tuple[str, ...]]] = {
+    "Python": ("python3",),
+    "SQL": ("structured query language",),
+    "Pandas": ("pandas library",),
+    "NumPy": ("numpy",),
+    "scikit-learn": ("sklearn", "scikit learn"),
+    "TensorFlow": ("tensorflow",),
+    "PyTorch": ("pytorch",),
+    "Machine Learning": ("machine learning", "ml"),
+    "Deep Learning": ("deep learning",),
+    "NLP": ("natural language processing",),
+    "LLM": ("large language model", "large language models"),
+    "RAG": ("retrieval augmented generation", "retrieval-augmented generation"),
+    "AWS": ("amazon web services",),
+    "Azure": ("microsoft azure",),
+    "GCP": ("google cloud platform",),
+    "FastAPI": ("fast api",),
+    "Flask": (),
+    "REST APIs": ("rest api", "restful api", "restful apis"),
+    "Java": ("java programming",),
+    "Spring": ("spring boot",),
+    "Git": ("version control",),
+    "Docker": (),
+    "Kubernetes": ("k8s",),
+    "MLOps": ("machine learning operations",),
+    "Airflow": ("apache airflow",),
+    "Spark": ("apache spark", "pyspark"),
+    "Power BI": ("powerbi",),
+    "Tableau": (),
+    "Excel": ("microsoft excel",),
+    "Data Visualization": ("data visualisation",),
+    "Statistics": ("statistical analysis",),
+    "Computer Vision": ("computer vision", "cv"),
+    "Transformers": ("transformer models",),
+    "Hugging Face": ("huggingface",),
+    "Selenium": (),
+    "Jira": (),
+    "Agile": ("scrum",),
+    "C++": ("cpp",),
+    "C#": ("c sharp",),
+    "C": (),
+}
+
+ROLE_SKILLS: Final[dict[str, tuple[str, ...]]] = {
+    "Data Analyst": ("Python", "SQL", "Pandas", "Power BI", "Tableau", "Statistics", "Data Visualization"),
+    "Data Scientist": ("Python", "SQL", "Pandas", "NumPy", "scikit-learn", "Statistics", "Machine Learning"),
+    "Machine Learning Engineer": ("Python", "scikit-learn", "TensorFlow", "PyTorch", "Machine Learning", "Docker", "MLOps"),
+    "AI/LLM Engineer": ("Python", "LLM", "RAG", "Transformers", "Hugging Face", "FastAPI", "Docker"),
+    "NLP Engineer": ("Python", "NLP", "Transformers", "PyTorch", "scikit-learn", "Machine Learning"),
+    "Data Engineer": ("Python", "SQL", "Spark", "Airflow", "AWS", "Docker"),
+    "MLOps Engineer": ("Python", "MLOps", "Docker", "Kubernetes", "AWS", "Git"),
+    "Python Backend Developer": ("Python", "FastAPI", "Flask", "REST APIs", "SQL", "Docker", "Git"),
+    "Java Developer": ("Java", "Spring", "REST APIs", "SQL", "Git", "Docker"),
+    "Business Intelligence Analyst": ("SQL", "Power BI", "Tableau", "Excel", "Data Visualization", "Statistics"),
+}
