@@ -1,88 +1,189 @@
-# AI-Based Resume Screening and Candidate Shortlisting System
+# AI Resume Screening & Candidate Shortlisting
 
-This project implements the four-phase HCLTech Career Shaper Project No. 34 prototype: dataset foundation and EDA, offline PDF/NLP matching, Flask/PostgreSQL integration, and measured evaluation/fairness documentation. The original supplied files remain unchanged.
+Recruiters enter a job description and upload PDF resumes. The application extracts text, identifies explicit skills, calculates TF-IDF similarity and explainable component scores, ranks candidates, and records the recruiter's final decision separately from the automated recommendation.
 
-## Setup
+> **Decision-support tool:** scores are not hiring probabilities or final hiring decisions. Human review is required.
+
+## Features
+
+- Multi-resume PDF upload with extension, content, and size validation
+- Temporary processing with no default raw-resume retention
+- PDF extraction using `pdfminer.six`
+- spaCy normalization and phrase-based skill extraction
+- Domain skill dictionary with synonym mapping
+- TF-IDF and cosine similarity
+- Explainable scoring:
+  - Text similarity: 50%
+  - Required skill coverage: 30%
+  - Relevant experience: 15%
+  - Education: 5%
+- Ranked candidates with matched and missing skills
+- Human review: shortlist, reject, and needs-review
+- Reviewer notes stored independently from automated scores
+- PostgreSQL persistence
+- CSV export
+- Evaluation and counterfactual fairness reports
+- Responsive Flask dashboard
+
+## Architecture
+
+```text
+JD + PDF Resumes
+       |
+       v
+Flask Application
+       |
+PDFMiner -> spaCy -> Skill Matching -> TF-IDF -> Explainable Scoring
+       |
+       v
+Candidate Ranking -> Human Review -> PostgreSQL
+```
+
+## Technology
+
+| Area | Technology |
+|---|---|
+| Backend | Python, Flask |
+| Database | PostgreSQL |
+| PDF processing | pdfminer.six |
+| NLP | spaCy, PhraseMatcher |
+| Matching | Skill dictionary, TF-IDF, cosine similarity |
+| Frontend | HTML, CSS, Bootstrap, JavaScript |
+| Deployment | Vercel Python runtime + Neon PostgreSQL |
+| Testing | pytest |
+
+## Project structure
+
+```text
+app.py                    Flask application and API routes
+api/index.py              Vercel serverless entrypoint
+vercel.json               Vercel configuration
+src/parser/               PDF parsing
+src/nlp/                  Text preprocessing
+src/matching/             Skills and similarity
+src/scoring/              Explainable scoring engine
+src/data/                 Dataset validation and cleaning
+src/eda/                  Exploratory data analysis
+src/evaluation/           Evaluation and report generation
+src/fairness/             Counterfactual fairness audit
+templates/                Recruiter dashboard
+static/                   Frontend assets
+tests/                    Unit and integration tests
+reports/                  Project documentation and results
+```
+
+## Local setup
+
+Production mode requires PostgreSQL. Neon PostgreSQL can be used for both local development and Vercel.
 
 ```powershell
 .\venv312\Scripts\Activate.ps1
 pip install -r requirements-dev.txt
-# Optional full spaCy model for statistical tokenization:
 python -m spacy download en_core_web_sm
 ```
 
-Use Neon PostgreSQL for local development and deployment by setting `DATABASE_URL`. Production mode requires PostgreSQL. `requirements.txt` contains runtime/Vercel dependencies; install `requirements-dev.txt` for tests, EDA, notebooks, and report generation.
+Create `.env` from [.env.example](./.env.example) and set your private values:
 
-## Deployment
-
-For a local or internal Windows deployment, create a `.env` file from `.env.example`, set a long random `SECRET_KEY`, and run the Waitress WSGI server:
-
-```powershell
-Copy-Item .env.example .env
-# Edit .env and replace SECRET_KEY before deployment
-.\venv312\Scripts\Activate.ps1
-pip install -r requirements.txt
-python run_production.py
+```env
+FLASK_ENV=development
+SECRET_KEY=<locally-generated-secret>
+DATABASE_URL=<your-Neon-PostgreSQL-connection-string>
+MAX_CONTENT_LENGTH=4194304
+MAX_RESUMES=20
 ```
 
-The default deployment URL is `http://127.0.0.1:8000`. Set `HOST=0.0.0.0` only when the host is intentionally reachable on a trusted network, and place a reverse proxy with HTTPS and authentication in front of any internet-facing deployment. Set `DATABASE_URL` to a PostgreSQL connection string for local and production use. Never commit `.env`, real resumes, or database credentials.
-
-## Vercel deployment
-
-The repository includes [`vercel.json`](./vercel.json) and [`api/index.py`](./api/index.py) for Vercel's Python serverless runtime.
-
-1. Push the repository to GitHub and import it into Vercel.
-2. Keep the framework preset as **Other** and leave the build command empty.
-3. Add these Vercel Environment Variables for the **Production** environment:
-
-   ```text
-   FLASK_ENV=production
-   SECRET_KEY=<a-long-random-secret>
-   DATABASE_URL=postgresql://user:password@host:5432/database?sslmode=require
-   MAX_CONTENT_LENGTH=4194304
-   MAX_RESUMES=20
-   ```
-
-4. Deploy and open the generated Vercel URL. Verify `https://<your-domain>/health` returns `{"status":"ok"}`.
-
-The application uses PostgreSQL when `DATABASE_URL` starts with `postgresql://` or `postgres://`, and creates the `candidates` table automatically on startup. Vercel's request limit makes the deployed default upload limit 4 MB total; use smaller PDFs. Configure the database provider to allow Vercel connections and require TLS (for example, `sslmode=require`). Do not use SQLite on Vercel.
-
-## Run the workflows
+Generate a secret locally:
 
 ```powershell
-python -m src.eda.run_eda
-python -m src.evaluation.run_evaluation
-python -m src.fairness.fairness_audit
-python -m src.evaluation.build_documents
-pytest
+.\venv312\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
-Outputs are written to `reports/` and the cleaned canonical copy is written to `data/processed/dataset_clean.csv`. The supplied source files are copied, not modified, to `data/raw/`.
-
-The Phase 2 public interface is `src.scoring.scoring_engine.screen_resume`. Phase 3 exposes the same engine through `app.py` and Flask routes. The PostgreSQL schema is initialized automatically:
+Run the application:
 
 ```powershell
 python app.py
 ```
 
-The dashboard is available at `http://127.0.0.1:5000`. API routes include `/health`, `/api/screen`, `/api/candidates`, `/api/candidates/<candidate_id>`, `/api/candidates/<candidate_id>/review`, and `/api/candidates.csv`. If `en_core_web_sm` is not installed, the engine uses spaCy's blank English pipeline for tokenization and phrase matching and reports that limitation in the result; it does not claim statistical model processing.
+Open `http://127.0.0.1:5000` and verify `http://127.0.0.1:5000/health`.
 
-TF-IDF similarity is lexical overlap, not semantic understanding. Scores and the configurable shortlist threshold are decision-support aids only; reviewer decisions must remain separate.
+The PostgreSQL `candidates` table is initialized automatically. Never commit `.env`, database credentials, real resumes, or generated database files.
 
-To generate 4,500 reproducible synthetic records into staging (never directly into raw):
+## Vercel deployment
 
-```powershell
-python -m src.data.generate_synthetic --count 4500
+The repository includes [vercel.json](./vercel.json) and [api/index.py](./api/index.py). The Vercel configuration intentionally avoids the unsupported `includeFiles` array; imported Python modules and application assets are bundled from the repository.
+
+1. Push the repository to GitHub and import it into Vercel.
+2. Select the **Other** framework preset.
+3. Leave the build command empty.
+4. Add these Production environment variables:
+
+   ```text
+   FLASK_ENV=production
+   SECRET_KEY=<long-random-secret>
+   DATABASE_URL=<your-Neon-PostgreSQL-connection-string>
+   MAX_CONTENT_LENGTH=4194304
+   MAX_RESUMES=20
+   ```
+
+5. Deploy and verify:
+
+   ```text
+   https://<your-domain>/health
+   ```
+
+Expected response:
+
+```json
+{"status":"ok"}
 ```
 
-Synthetic `shortlisted` values are rule-based demonstrations, not real hiring decisions, and must not be used as evidence of hiring performance without validation.
+Use a TLS-enabled Neon connection string. Vercel uploads are limited to 4 MB by the application configuration, so use compact PDFs. Do not use SQLite for Vercel persistence.
 
-## Phase 1 architecture
+## API
 
-Resume PDF + Job Description -> Flask Application -> PDF Text Extraction -> spaCy Preprocessing -> Skill Extraction -> TF-IDF and Cosine Similarity -> Explainable Scoring -> Candidate Ranking -> Human Review
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/health` | Health check |
+| POST | `/api/screen` | Process a JD and PDF resumes |
+| GET | `/api/candidates` | List ranked candidates |
+| GET | `/api/candidates/<candidate_id>` | Candidate details |
+| POST | `/api/candidates/<candidate_id>/review` | Save human review |
+| GET | `/api/candidates.csv` | Export results |
 
-Phase 4 outputs include `reports/evaluation_report.md`, `reports/fairness_report.md`, `reports/project_report.docx`, `reports/Project_Synopsis_DRAFT_Name_RollNo.docx`, `reports/demo_script.md`, and `reports/ethical_compliance_checklist.md`.
+## Tests and workflows
 
-## Source files and limitations
+```powershell
+pytest -q
+python -m src.eda.run_eda
+python -m src.evaluation.run_evaluation
+python -m src.fairness.fairness_audit
+python -m src.evaluation.build_documents
+```
 
-The supplied files use names with `(1)` suffixes, so the workflow detects those names and copies them into canonical raw paths. The brief states that `shortlisted` is a Y/N field, while the actual CSV uses integer 0/1 values. The audit preserves the observed values and records this discrepancy. There are five observed job roles, not the ten suggested for optional synthetic expansion. No demographic fields are present, so demographic fairness cannot be measured from this dataset; controlled counterfactual tests are deferred to the fairness phase.
+The verified test suite contains **16 passing tests**. Evaluation results are based on the documented synthetic evaluation set and do not establish real-world hiring performance.
+
+## Responsible AI and privacy
+
+- Automated scores are review aids, not final hiring decisions.
+- Reviewer decisions are stored separately from computed scores.
+- Candidate IDs do not depend on names or filenames.
+- Raw PDFs are processed temporarily and are not retained by default.
+- The dataset has no validated demographic attributes.
+- Counterfactual tests do not prove that the system is fair.
+- TF-IDF measures lexical overlap, not semantic understanding.
+- Authentication and role-based access control require additional production work.
+- DPDP Act 2023 applicability and institutional compliance require manual review.
+
+## Documentation
+
+- [Evaluation report](./reports/evaluation_report.md)
+- [Fairness report](./reports/fairness_report.md)
+- [Technical project report](./reports/project_report.docx)
+- [Synopsis draft](./reports/Project_Synopsis_DRAFT_Name_RollNo.docx)
+- [Demo script](./reports/demo_script.md)
+- [Ethical compliance checklist](./reports/ethical_compliance_checklist.md)
+
+## Deployment status
+
+Configured for **Vercel + Neon PostgreSQL** and verified locally with PostgreSQL-backed startup, Vercel entrypoint import, `/health`, the full **16-test** suite, and zero Pylance diagnostics.
+

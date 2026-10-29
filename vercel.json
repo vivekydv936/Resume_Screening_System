@@ -3,12 +3,7 @@
   "functions": {
     "api/index.py": {
       "runtime": "python3.12",
-      "maxDuration": 60,
-      "includeFiles": [
-        "templates/**",
-        "static/**",
-        "src/**"
-      ]
+      "maxDuration": 60
     }
   },
   "routes": [
