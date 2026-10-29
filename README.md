@@ -110,7 +110,7 @@ The PostgreSQL `candidates` table is initialized automatically. Never commit `.e
 
 ## Vercel deployment
 
-The repository includes [vercel.json](./vercel.json) and [api/index.py](./api/index.py). The Vercel configuration intentionally avoids the unsupported `includeFiles` array; imported Python modules and application assets are bundled from the repository.
+The repository includes [vercel.json](./vercel.json) and [api/index.py](./api/index.py). Vercel auto-detects the Python function from the `api/` directory; no explicit runtime string is required.
 
 1. Push the repository to GitHub and import it into Vercel.
 2. Select the **Other** framework preset.
@@ -186,4 +186,3 @@ The verified test suite contains **16 passing tests**. Evaluation results are ba
 ## Deployment status
 
 Configured for **Vercel + Neon PostgreSQL** and verified locally with PostgreSQL-backed startup, Vercel entrypoint import, `/health`, the full **16-test** suite, and zero Pylance diagnostics.
-
