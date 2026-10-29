@@ -1,9 +1,0 @@
-column_name,data_type,sample_value_1,sample_value_2,sample_value_3,nullable,description_fill_in
-resume_id,object/numeric,R0001,R0002,R0003,No,resume_id — [Learner to fill in description]
-job_role,object/numeric,Data_Analyst,Data_Analyst,Software_Engineer,No,job_role — [Learner to fill in description]
-years_exp,object/numeric,3,5,9,No,years_exp — [Learner to fill in description]
-skills_matched,object/numeric,8,6,11,No,skills_matched — [Learner to fill in description]
-education_score,object/numeric,73,67,89,No,education_score — [Learner to fill in description]
-keyword_density,object/numeric,0.129,0.747,0.713,No,keyword_density — [Learner to fill in description]
-predicted_score,object/numeric,46.1,97.7,61.1,No,predicted_score — [Learner to fill in description]
-shortlisted,object/numeric,0,1,1,No,shortlisted — [Learner to fill in description]
